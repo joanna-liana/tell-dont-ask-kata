@@ -13,32 +13,23 @@ class Order {
     return this.total;
   }
 
-  public setTotal(total: number): void {
-    this.total = total;
-  }
-
   public getCurrency(): string {
     return this.currency;
-  }
-
-  public setCurrency(currency: string): void {
-    this.currency = currency;
   }
 
   public getItems(): OrderItem[] {
     return this.items;
   }
 
-  public setItems(items: OrderItem[]): void {
-    this.items = items;
+  public addItem(item: OrderItem): void {
+    this.items.push(item);
+
+    this.total += item.getTaxedAmount();
+    this.tax += item.getTax();
   }
 
   public getTax(): number {
     return this.tax;
-  }
-
-  public setTax(tax: number): void {
-    this.tax = tax;
   }
 
   public getStatus(): OrderStatus {
@@ -55,6 +46,19 @@ class Order {
 
   public setId(id: number): void {
     this.id = id;
+  }
+
+  static created(id?: number): Order {
+    const order = new Order();
+
+    order.id = id;
+    order.total = 0;
+    order.currency = 'EUR';
+    order.items = [];
+    order.tax = 0;
+    order.status = OrderStatus.CREATED;
+
+    return order;
   }
 }
 

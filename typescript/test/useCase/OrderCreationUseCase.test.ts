@@ -10,7 +10,7 @@ import UnknownProductException from '../../src/useCase/UnknownProductException';
 import InMemoryProductCatalog from '../doubles/InMemoryProductCatalog';
 import TestOrderRepository from '../doubles/TestOrderRepository';
 
-describe('OrderApprovalUseCase', () => {
+describe('Order Creation Use Case', () => {
   const orderRepository: TestOrderRepository = new TestOrderRepository();
   const food: Category = new Category();
   food.setName('food');
@@ -28,6 +28,7 @@ describe('OrderApprovalUseCase', () => {
   const useCase: OrderCreationUseCase = new OrderCreationUseCase(orderRepository, productCatalog);
 
   it('sellMultipleItems', () => {
+    // given
     const saladRequest: SellItemRequest = new SellItemRequest();
     saladRequest.setProductName('salad');
     saladRequest.setQuantity(2);
@@ -41,8 +42,10 @@ describe('OrderApprovalUseCase', () => {
     request.getRequests().push(saladRequest);
     request.getRequests().push(tomatoRequest);
 
+    // when
     useCase.run(request);
 
+    // then
     const insertedOrder: Order = orderRepository.getSavedOrder();
     expect(insertedOrder.getStatus()).toBe(OrderStatus.CREATED);
     expect(insertedOrder.getTotal()).toBe(23.20);

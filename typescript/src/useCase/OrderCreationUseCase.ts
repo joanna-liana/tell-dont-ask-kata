@@ -25,7 +25,7 @@ class OrderCreationUseCase {
     order.setTax(0);
 
     for (const itemRequest of request.getRequests()) {
-       const product: Product = this.productCatalog.getByName(itemRequest.getProductName());
+      const product: Product = this.productCatalog.getByName(itemRequest.getProductName());
 
       if (product === undefined) {
         throw new UnknownProductException();

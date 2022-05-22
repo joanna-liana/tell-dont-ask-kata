@@ -10,53 +10,52 @@ class Order {
   private id: number;
 
   public getTotal(): number {
-      return this.total;
+    return this.total;
   }
 
-  public setTotal(total: number): void  {
-      this.total = total;
+  public setTotal(total: number): void {
+    this.total = total;
   }
 
   public getCurrency(): string {
-      return this.currency;
+    return this.currency;
   }
 
   public setCurrency(currency: string): void {
-      this.currency = currency;
+    this.currency = currency;
   }
 
   public getItems(): OrderItem[] {
-      return this.items;
+    return this.items;
   }
 
   public setItems(items: OrderItem[]): void {
-      this.items = items;
+    this.items = items;
   }
 
   public getTax(): number {
-      return this.tax;
+    return this.tax;
   }
 
   public setTax(tax: number): void {
-      this.tax = tax;
+    this.tax = tax;
   }
 
   public getStatus(): OrderStatus {
-      return this.status;
+    return this.status;
   }
 
   public setStatus(status: OrderStatus): void {
-      this.status = status;
+    this.status = status;
   }
 
   public getId(): number {
-      return this.id;
+    return this.id;
   }
 
   public setId(id: number): void {
-      this.id = id;
+    this.id = id;
   }
 }
 
 export default Order;
-

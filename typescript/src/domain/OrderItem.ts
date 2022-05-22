@@ -15,7 +15,7 @@ class OrderItem {
   }
 
   public getQuantity(): number {
-      return this.quantity;
+    return this.quantity;
   }
 
   public setQuantity(quantity: number): void {
@@ -40,4 +40,3 @@ class OrderItem {
 }
 
 export default OrderItem;
-

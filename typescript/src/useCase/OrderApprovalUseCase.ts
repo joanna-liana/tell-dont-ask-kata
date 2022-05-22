@@ -10,27 +10,27 @@ class OrderApprovalUseCase {
   private readonly orderRepository: OrderRepository;
 
   public constructor(orderRepository: OrderRepository){
-      this.orderRepository = orderRepository;
+    this.orderRepository = orderRepository;
   }
 
   public run(request: OrderApprovalRequest): void {
-      const order: Order = this.orderRepository.getById(request.getOrderId());
+    const order: Order = this.orderRepository.getById(request.getOrderId());
 
-      if (order.getStatus() === OrderStatus.SHIPPED) {
-          throw new ShippedOrdersCannotBeChangedException();
-      }
+    if (order.getStatus() === OrderStatus.SHIPPED) {
+      throw new ShippedOrdersCannotBeChangedException();
+    }
 
-      if (request.isApproved() && order.getStatus() === OrderStatus.REJECTED) {
-          throw new RejectedOrderCannotBeApprovedException();
-      }
+    if (request.isApproved() && order.getStatus() === OrderStatus.REJECTED) {
+      throw new RejectedOrderCannotBeApprovedException();
+    }
 
-      if (!request.isApproved() && order.getStatus() === OrderStatus.APPROVED) {
-          throw new ApprovedOrderCannotBeRejectedException();
-      }
+    if (!request.isApproved() && order.getStatus() === OrderStatus.APPROVED) {
+      throw new ApprovedOrderCannotBeRejectedException();
+    }
 
-      order.setStatus(request.isApproved() ? OrderStatus.APPROVED : OrderStatus.REJECTED);
-      this.orderRepository.save(order);
+    order.setStatus(request.isApproved() ? OrderStatus.APPROVED : OrderStatus.REJECTED);
+    this.orderRepository.save(order);
   }
 }
 
-export default OrderApprovalUseCase
+export default OrderApprovalUseCase;

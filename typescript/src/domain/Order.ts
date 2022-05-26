@@ -1,5 +1,8 @@
+import ApprovedOrderCannotBeRejectedException from '../useCase/ApprovedOrderCannotBeRejectedException';
 import OrderCannotBeShippedException from '../useCase/OrderCannotBeShippedException';
 import OrderCannotBeShippedTwiceException from '../useCase/OrderCannotBeShippedTwiceException';
+import RejectedOrderCannotBeApprovedException from '../useCase/RejectedOrderCannotBeApprovedException';
+import ShippedOrdersCannotBeChangedException from '../useCase/ShippedOrdersCannotBeChangedException';
 import OrderItem from './OrderItem';
 import { OrderStatus } from './OrderStatus';
 
@@ -58,6 +61,10 @@ class Order {
     return this.getStatus() === OrderStatus.REJECTED;
   }
 
+  private get isApproved(): boolean {
+    return this.getStatus() === OrderStatus.APPROVED;
+  }
+
   private get isCreated(): boolean {
     return this.getStatus() === OrderStatus.CREATED;
   }
@@ -72,6 +79,32 @@ class Order {
     }
 
     this.status = OrderStatus.SHIPPED;
+  }
+
+  public approve(): void {
+    this.ensureStatusCanBeChanged();
+
+    if (this.isRejected) {
+      throw new RejectedOrderCannotBeApprovedException();
+    }
+
+    this.status = OrderStatus.APPROVED;
+  }
+
+  public reject(): void {
+    this.ensureStatusCanBeChanged();
+
+    if (this.isApproved) {
+      throw new ApprovedOrderCannotBeRejectedException();
+    }
+
+    this.status = OrderStatus.REJECTED;
+  }
+
+  private ensureStatusCanBeChanged(): void {
+    if (this.isShipped) {
+      throw new ShippedOrdersCannotBeChangedException();
+    }
   }
 
   static created(id?: number): Order {

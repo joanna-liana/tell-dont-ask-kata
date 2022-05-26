@@ -51,6 +51,7 @@ describe('Order Creation Use Case', () => {
     expect(insertedOrder.getTotal()).toBe(23.20);
     expect(insertedOrder.getTax()).toBe((2.13));
     expect(insertedOrder.getCurrency()).toBe(('EUR'));
+
     expect(insertedOrder.getItems().length).toBe(2);
     expect(insertedOrder.getItems()[0].getProduct().getName()).toBe('salad');
     expect(insertedOrder.getItems()[0].getProduct().getPrice()).toBe(3.56);

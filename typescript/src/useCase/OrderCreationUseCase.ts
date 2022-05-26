@@ -1,6 +1,5 @@
 import Order from '../domain/Order';
 import OrderItem from '../domain/OrderItem';
-import { OrderStatus } from '../domain/OrderStatus';
 import Product from '../domain/Product';
 import OrderRepository from '../repository/OrderRepository';
 import { ProductCatalog } from '../repository/ProductCatalog';

@@ -19,9 +19,8 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('shipApprovedOrder', () => {
-    const initialOrder: Order = new Order();
-    initialOrder.setId(1);
-    initialOrder.setStatus(OrderStatus.APPROVED);
+    const initialOrder: Order = Order.created(1);
+    initialOrder.approve();
     orderRepository.addOrder(initialOrder);
 
     const request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -34,9 +33,7 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('createdOrdersCannotBeShipped', () => {
-    const initialOrder: Order = new Order();
-    initialOrder.setId(2);
-    initialOrder.setStatus(OrderStatus.CREATED);
+    const initialOrder: Order = Order.created(2);
     orderRepository.addOrder(initialOrder);
 
     const request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -48,9 +45,8 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('rejectedOrdersCannotBeShipped', () => {
-    const initialOrder: Order = new Order();
-    initialOrder.setId(3);
-    initialOrder.setStatus(OrderStatus.REJECTED);
+    const initialOrder: Order = Order.created(3);
+    initialOrder.reject();
     orderRepository.addOrder(initialOrder);
 
     const request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -62,9 +58,8 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('shippedOrdersCannotBeShippedAgain', () => {
-    const initialOrder: Order = new Order();
-    initialOrder.setId(4);
-    initialOrder.setStatus(OrderStatus.SHIPPED);
+    const initialOrder: Order = new Order(4);
+    initialOrder.ship();
     orderRepository.addOrder(initialOrder);
 
     const request: OrderShipmentRequest = new OrderShipmentRequest();

@@ -12,7 +12,8 @@ class Order {
   private items: OrderItem[];
   private tax: number;
   private status: OrderStatus;
-  private id: number;
+
+  constructor(private id?: number) {}
 
   public getTotal(): number {
     return this.total;
@@ -41,16 +42,8 @@ class Order {
     return this.status;
   }
 
-  public setStatus(status: OrderStatus): void {
-    this.status = status;
-  }
-
   public getId(): number {
     return this.id;
-  }
-
-  public setId(id: number): void {
-    this.id = id;
   }
 
   private get isShipped(): boolean {
@@ -108,9 +101,8 @@ class Order {
   }
 
   static created(id?: number): Order {
-    const order = new Order();
+    const order = new Order(id);
 
-    order.id = id;
     order.total = 0;
     order.currency = 'EUR';
     order.items = [];

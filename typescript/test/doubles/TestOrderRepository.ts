@@ -14,7 +14,7 @@ class TestOrderRepository implements OrderRepository {
   }
 
   public getById(orderId: number): Order {
-    return this.orders.find(o => o.getId() === orderId);
+    return this.orders.find(o => o.id === orderId);
   }
 
   public addOrder(order: Order): void {

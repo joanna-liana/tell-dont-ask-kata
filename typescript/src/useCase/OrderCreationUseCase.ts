@@ -19,13 +19,13 @@ class OrderCreationUseCase {
     const order: Order = Order.created();
 
     for (const itemRequest of request.getRequests()) {
-      const product: Product = this.productCatalog.getByName(itemRequest.getProductName());
+      const product: Product = this.productCatalog.getByName(itemRequest.productName);
 
       if (product === undefined) {
         throw new UnknownProductException();
       }
 
-      const orderItem: OrderItem = OrderItem.create(product, itemRequest.getQuantity());
+      const orderItem: OrderItem = OrderItem.create(product, itemRequest.quantity);
 
       order.addItem(orderItem);
     }

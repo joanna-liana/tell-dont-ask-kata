@@ -28,7 +28,7 @@ describe('OrderShipmentUseCase', () => {
 
     useCase.run(request);
 
-    expect(orderRepository.getSavedOrder().getStatus()).toBe(OrderStatus.SHIPPED);
+    expect(orderRepository.getSavedOrder().status).toBe(OrderStatus.SHIPPED);
     expect(shipmentService.getShippedOrder()).toBe(initialOrder);
   });
 

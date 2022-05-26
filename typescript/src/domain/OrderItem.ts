@@ -1,40 +1,40 @@
 import Product from './Product';
 
 class OrderItem {
-  private product: Product;
-  private quantity: number;
-  private taxedAmount: number;
-  private tax: number;
+  private _product: Product;
+  private _quantity: number;
+  private _taxedAmount: number;
+  private _tax: number;
 
-  public getProduct(): Product {
-    return this.product;
+  public get product(): Product {
+    return this._product;
   }
 
-  public getQuantity(): number {
-    return this.quantity;
+  public get quantity(): number {
+    return this._quantity;
   }
 
-  public getTaxedAmount(): number {
-    return this.taxedAmount;
+  public get taxedAmount(): number {
+    return this._taxedAmount;
   }
 
-  public getTax(): number {
-    return this.tax;
+  public get tax(): number {
+    return this._tax;
   }
 
   static create(product: Product, quantity: number): OrderItem {
     const item = new OrderItem();
 
-    item.product = product;
-    item.quantity = quantity;
+    item._product = product;
+    item._quantity = quantity;
 
-    const unitaryTax: number = Math.round(product.getPrice() / 100 * product.getCategory().getTaxPercentage() * 100) / 100;
-    const unitaryTaxedAmount: number = Math.round((product.getPrice() + unitaryTax) * 100) / 100;
+    const unitaryTax: number = Math.round(product.price / 100 * product.category.taxPercentage * 100) / 100;
+    const unitaryTaxedAmount: number = Math.round((product.price + unitaryTax) * 100) / 100;
     const taxedAmount: number = Math.round(unitaryTaxedAmount * quantity * 100) / 100;
     const taxAmount: number = unitaryTax * quantity;
 
-    item.tax = taxAmount;
-    item.taxedAmount = taxedAmount;
+    item._tax = taxAmount;
+    item._taxedAmount = taxedAmount;
 
     return item;
   }

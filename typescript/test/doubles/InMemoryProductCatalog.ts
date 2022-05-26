@@ -9,9 +9,8 @@ class InMemoryProductCatalog implements ProductCatalog {
   }
 
   public getByName(name: string): Product {
-    return this.products.find(p => p.getName() === name);
+    return this.products.find(p => p.name === name);
   }
 }
 
 export default InMemoryProductCatalog;
-

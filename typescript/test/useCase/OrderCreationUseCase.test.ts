@@ -12,30 +12,37 @@ import TestOrderRepository from '../doubles/TestOrderRepository';
 
 describe('Order Creation Use Case', () => {
   const orderRepository: TestOrderRepository = new TestOrderRepository();
-  const food: Category = new Category();
-  food.setName('food');
-  food.setTaxPercentage(10);
+  const food: Category = new Category(
+    'food',
+    10
+  );
 
-  const saladProduct = new Product();
-  saladProduct.setName('salad');
-  saladProduct.setPrice(3.56);
-  saladProduct.setCategory(food);
-  const tomatoProduct = new Product();
-  tomatoProduct.setName('tomato');
-  tomatoProduct.setPrice(4.65);
-  tomatoProduct.setCategory(food);
+  const saladProduct = new Product(
+    'salad',
+    3.56,
+    food
+  );
+
+  const tomatoProduct = new Product(
+    'tomato',
+    4.65,
+    food
+  );
+
   const productCatalog: ProductCatalog = new InMemoryProductCatalog([saladProduct, tomatoProduct]);
   const useCase: OrderCreationUseCase = new OrderCreationUseCase(orderRepository, productCatalog);
 
   it('sellMultipleItems', () => {
     // given
-    const saladRequest: SellItemRequest = new SellItemRequest();
-    saladRequest.setProductName('salad');
-    saladRequest.setQuantity(2);
+    const saladRequest: SellItemRequest = new SellItemRequest(
+      'salad',
+      2
+    );
 
-    const tomatoRequest: SellItemRequest = new SellItemRequest();
-    tomatoRequest.setProductName('tomato');
-    tomatoRequest.setQuantity(3);
+    const tomatoRequest: SellItemRequest = new SellItemRequest(
+      'tomato',
+      3
+    );
 
     const request: SellItemsRequest = new SellItemsRequest();
     request.setRequests([]);
@@ -47,29 +54,30 @@ describe('Order Creation Use Case', () => {
 
     // then
     const insertedOrder: Order = orderRepository.getSavedOrder();
-    expect(insertedOrder.getStatus()).toBe(OrderStatus.CREATED);
-    expect(insertedOrder.getTotal()).toBe(23.20);
-    expect(insertedOrder.getTax()).toBe((2.13));
-    expect(insertedOrder.getCurrency()).toBe(('EUR'));
+    expect(insertedOrder.status).toBe(OrderStatus.CREATED);
+    expect(insertedOrder.total).toBe(23.20);
+    expect(insertedOrder.tax).toBe((2.13));
+    expect(insertedOrder.currency).toBe(('EUR'));
 
-    expect(insertedOrder.getItems().length).toBe(2);
-    expect(insertedOrder.getItems()[0].getProduct().getName()).toBe('salad');
-    expect(insertedOrder.getItems()[0].getProduct().getPrice()).toBe(3.56);
-    expect(insertedOrder.getItems()[0].getQuantity()).toBe(2);
-    expect(insertedOrder.getItems()[0].getTaxedAmount()).toBe(7.84);
-    expect(insertedOrder.getItems()[0].getTax()).toBe(0.72);
-    expect(insertedOrder.getItems()[1].getProduct().getName()).toBe('tomato');
-    expect(insertedOrder.getItems()[1].getProduct().getPrice()).toBe(4.65);
-    expect(insertedOrder.getItems()[1].getQuantity()).toBe(3);
-    expect(insertedOrder.getItems()[1].getTaxedAmount()).toBe(15.36);
-    expect(insertedOrder.getItems()[1].getTax()).toBe(1.41);
+    expect(insertedOrder.items.length).toBe(2);
+    expect(insertedOrder.items[0].product.name).toBe('salad');
+    expect(insertedOrder.items[0].product.price).toBe(3.56);
+    expect(insertedOrder.items[0].quantity).toBe(2);
+    expect(insertedOrder.items[0].taxedAmount).toBe(7.84);
+    expect(insertedOrder.items[0].tax).toBe(0.72);
+    expect(insertedOrder.items[1].product.name).toBe('tomato');
+    expect(insertedOrder.items[1].product.price).toBe(4.65);
+    expect(insertedOrder.items[1].quantity).toBe(3);
+    expect(insertedOrder.items[1].taxedAmount).toBe(15.36);
+    expect(insertedOrder.items[1].tax).toBe(1.41);
   });
 
   it('unknownProduct', () => {
     const request: SellItemsRequest = new SellItemsRequest();
     request.setRequests([]);
-    const unknownProductRequest: SellItemRequest = new SellItemRequest();
-    unknownProductRequest.setProductName('unknown product');
+    const unknownProductRequest: SellItemRequest = new SellItemRequest(
+      'unknown product'
+    );
     request.getRequests().push(unknownProductRequest);
 
     expect(() => useCase.run(request)).toThrow(UnknownProductException);

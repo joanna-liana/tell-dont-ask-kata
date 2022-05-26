@@ -1,3 +1,5 @@
+import OrderCannotBeShippedException from '../useCase/OrderCannotBeShippedException';
+import OrderCannotBeShippedTwiceException from '../useCase/OrderCannotBeShippedTwiceException';
 import OrderItem from './OrderItem';
 import { OrderStatus } from './OrderStatus';
 
@@ -46,6 +48,30 @@ class Order {
 
   public setId(id: number): void {
     this.id = id;
+  }
+
+  private get isShipped(): boolean {
+    return this.getStatus() === OrderStatus.SHIPPED;
+  }
+
+  private get isRejected(): boolean {
+    return this.getStatus() === OrderStatus.REJECTED;
+  }
+
+  private get isCreated(): boolean {
+    return this.getStatus() === OrderStatus.CREATED;
+  }
+
+  public ship(): void {
+    if (this.isCreated || this.isRejected) {
+      throw new OrderCannotBeShippedException();
+    }
+
+    if (this.isShipped) {
+      throw new OrderCannotBeShippedTwiceException();
+    }
+
+    this.status = OrderStatus.SHIPPED;
   }
 
   static created(id?: number): Order {

@@ -1,6 +1,7 @@
 import Order from '../domain/Order';
 import OrderItem from '../domain/OrderItem';
 import Product from '../domain/Product';
+import { calculateTax, TaxCalculator } from '../domain/TaxCalculator';
 import OrderRepository from '../repository/OrderRepository';
 import { ProductCatalog } from '../repository/ProductCatalog';
 import SellItemsRequest from './SellItemsRequest';
@@ -10,7 +11,7 @@ class OrderCreationUseCase {
   private readonly orderRepository: OrderRepository;
   private readonly productCatalog: ProductCatalog;
 
-  public constructor(orderRepository: OrderRepository, productCatalog: ProductCatalog) {
+  public constructor(orderRepository: OrderRepository, productCatalog: ProductCatalog, private readonly taxCalculator: TaxCalculator = calculateTax) {
     this.orderRepository = orderRepository;
     this.productCatalog = productCatalog;
   }
@@ -25,7 +26,7 @@ class OrderCreationUseCase {
         throw new UnknownProductException();
       }
 
-      const orderItem: OrderItem = OrderItem.create(product, itemRequest.quantity);
+      const orderItem: OrderItem = OrderItem.create(product, itemRequest.quantity, this.taxCalculator);
 
       order.addItem(orderItem);
     }

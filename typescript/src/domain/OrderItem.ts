@@ -1,3 +1,4 @@
+import { ItemTax, TaxCalculator } from './TaxCalculator';
 import Product from './Product';
 
 class OrderItem {
@@ -22,16 +23,13 @@ class OrderItem {
     return this._tax;
   }
 
-  static create(product: Product, quantity: number): OrderItem {
+  static create(product: Product, quantity: number, calculateTax: TaxCalculator): OrderItem {
     const item = new OrderItem();
 
     item._product = product;
     item._quantity = quantity;
 
-    const unitaryTax: number = Math.round(product.price / 100 * product.category.taxPercentage * 100) / 100;
-    const unitaryTaxedAmount: number = Math.round((product.price + unitaryTax) * 100) / 100;
-    const taxedAmount: number = Math.round(unitaryTaxedAmount * quantity * 100) / 100;
-    const taxAmount: number = unitaryTax * quantity;
+    const { taxAmount, taxedAmount }: ItemTax = calculateTax(product, quantity);
 
     item._tax = taxAmount;
     item._taxedAmount = taxedAmount;
